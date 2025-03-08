@@ -1,30 +1,27 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import Login from "../../app-temp/screens/Login";
 
-const home = () => {
+
+const index = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}>home</Text>
-    </View>
-  )
-}
+    <Login/>
+    
+  );
+};
 
-export default home
+export default index;
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor:'#EDE0D4',
-        alignItems:'center',
-        justifyContent:'center'
-    },
-    titulo:{
-        fontSize:30,
-        fontWeight:'bold',
-        color:'#4B2E1E'
-    },
-    link:{
-        color:'#4B2E1E',
-        fontSize:20
-    }
-})
+  container: {
+    flex: 1,
+    backgroundColor: '#EDE0D4',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  titulo: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#4B2E1E'
+  }
+});

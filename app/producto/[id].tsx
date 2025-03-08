@@ -1,29 +1,77 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { ActivityIndicator, Button, StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import Boton from '../../app-temp/components/Boton'
+import { Link, useLocalSearchParams } from 'expo-router'
 
-const ProductDetailScreen = () => {
-    const { id } = useLocalSearchParams();
-    const [product, setProduct] = useState(null);
 
-    useEffect(() => {
-        if (id) {
-            fetch(`https://fakestoreapi.com/products/${id}`)
-                .then(response => response.json())
-                .then(data => setProduct(data));
+const producto = () => {
+    const {id}=useLocalSearchParams();
+    
+    type prod={
+        id:number,
+        title:string,
+        price:number,
+        description:string,
+        category:string,
+        image:string,
+        rating:{
+            rate:number,
+            count:number
         }
-    }, [id]);
+    }
 
-    if (!product) return <Text>Loading...</Text>;
+    const [producto,setProducto]=useState<prod>();
+    const [loading,setLoading]=useState<boolean>(true);
+    
+    const loadData= async()=>{
+        setLoading(true);
+        try{
+            const respuesta=await fetch('https://fakestoreapi.com/products/'+id);
+            if(!respuesta.ok){
+                console.log('error1');
+                throw new Error('Ocurrio el error : ${respuesta.status}');
+            }
+            const datos= await respuesta.json();
+            console.log(datos);
+            setProducto(datos);
+            setLoading(false);
 
-    return (
-        <View style={{ padding: 20 }}>
-            <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{product.title}</Text>
-            <Text>{product.description}</Text>
-            <Text>Price: ${product.price}</Text>
-            <Text>Category: {product.category}</Text>
+        }catch(e){
+            console.log('Error : ',e)
+        }
+    }
+
+    const screenload=()=>{
+        return(
+            <View>
+                <Text>Tienda</Text>
+                <Text>Producto : {producto?.title}</Text>
+                <Text>descripcion : {producto?.description}</Text>
+                <Link href={"../index"}>
+                    go back...
+                </Link>
+            </View>
+        )
+    
+    }
+
+    const screenUnLoad=()=>{
+        return(
+        <View>
+            <Boton titulo='Carga datos' onPress={loadData}/>
+            <Text>Cargando datos</Text>
+            <ActivityIndicator/>
         </View>
-    );
-};
+        )
+        
+    }
+  return (
+    <View>
+        {loading?screenUnLoad():screenload()}
+    </View>
+  )
+}
 
-export default ProductDetailScreen;
+export default producto
+
+const styles = StyleSheet.create({})
